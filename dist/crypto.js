@@ -492,19 +492,36 @@ var decrypt = function () {
               name: key.algorithm.name,
               iv: context.iv
             };
-            _context10.next = 5;
+            decrypted = void 0;
+            _context10.prev = 4;
+            _context10.next = 7;
             return decryptBuffer(key, context.ciphertext, cipherContext);
 
-          case 5:
+          case 7:
             decrypted = _context10.sent;
+            _context10.next = 14;
+            break;
+
+          case 10:
+            _context10.prev = 10;
+            _context10.t0 = _context10['catch'](4);
+
+            if (!(_context10.t0.message === 'Unsupported state or unable to authenticate data')) {
+              _context10.next = 14;
+              break;
+            }
+
+            throw new _errors.MasqError(_errors.ERRORS.UNABLE_TO_DECRYPT);
+
+          case 14:
             return _context10.abrupt('return', JSON.parse(Buffer.from(decrypted).toString()));
 
-          case 7:
+          case 15:
           case 'end':
             return _context10.stop();
         }
       }
-    }, _callee10, undefined);
+    }, _callee10, undefined, [[4, 10]]);
   }));
 
   return function decrypt(_x30, _x31) {

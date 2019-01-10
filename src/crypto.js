@@ -1,4 +1,4 @@
-import { generateError, ERRORS, checkObject } from './errors'
+import { generateError, ERRORS, checkObject, MasqError } from './errors'
 
 const genRandomBuffer = (len = 16) => {
   const values = window.crypto.getRandomValues(new Uint8Array(len))
@@ -261,7 +261,14 @@ const decrypt = async (key, ciphertext, format = 'hex') => {
     iv: context.iv
   }
 
-  const decrypted = await decryptBuffer(key, context.ciphertext, cipherContext)
+  let decrypted
+  try {
+    decrypted = await decryptBuffer(key, context.ciphertext, cipherContext)
+  } catch (e) {
+    if (e.message === 'Unsupported state or unable to authenticate data') {
+      throw new MasqError(ERRORS.UNABLE_TO_DECRYPT)
+    }
+  }
   return JSON.parse(Buffer.from(decrypted).toString())
 }
 
